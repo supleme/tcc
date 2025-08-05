@@ -5,13 +5,19 @@ import { App } from './app';
 import { Navbar } from './components/navbar/navbar';
 import { HomeAluno } from './features/home-aluno/home-aluno';
 import { Apontamento } from './features/apontamento/apontamento';
+import { Relatorio } from './features/relatorio/relatorio';
+import { Alunos } from './features/alunos/alunos';
+import { Login } from './components/login/login';
 
 @NgModule({
   declarations: [
     App,
     Navbar,
     HomeAluno,
-    Apontamento
+    Apontamento,
+    Relatorio,
+    Alunos,
+    Login,
   ],
   imports: [
     BrowserModule,

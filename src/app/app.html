@@ -1,4 +1,5 @@
-<app-navbar></app-navbar>
-<div class="p-8 w-full">
-  <router-outlet></router-outlet>
+<app-navbar *ngIf="!isLoginPage()"></app-navbar>
+
+<div [class.p-8]="!isLoginPage()" class="w-full">
+  <router-outlet class="w-full h-full"></router-outlet>
 </div>
