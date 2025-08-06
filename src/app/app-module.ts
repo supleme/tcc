@@ -8,6 +8,7 @@ import { Apontamento } from './features/apontamento/apontamento';
 import { Relatorio } from './features/relatorio/relatorio';
 import { Alunos } from './features/alunos/alunos';
 import { Login } from './components/login/login';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { Login } from './components/login/login';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()

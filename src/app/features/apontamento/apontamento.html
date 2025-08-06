@@ -2,7 +2,7 @@
   <div class="text-center col-start-2 col-end-6"><span class="self-center text-2xl font-semibold whitespace-nowrap">Apontamento</span></div>
 </div>
 
-<form class="w-4/5 mx-auto justify-end py-2.5 rounded-xl shadow-xl sm:p-8">
+<form [formGroup]="apontamentoForm" class="w-4/5 mx-auto justify-end py-2.5 rounded-xl shadow-xl sm:p-8">
   <div class="mb-5">
     <!-- <div class="flex items-center mb-4">
         <input id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
@@ -20,29 +20,29 @@
         Subprojeto
       </button>
       <br><br>
-      <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome do atividade">
+      <input type="text" formControlName="nomeAtividade" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome do atividade">
   </div>
   <div class="mb-5">
       <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Tarefa</label>
-      <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Tarefa do subprojeto">
+      <input type="text" id="base-input" formControlName="tarefa" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Tarefa do subprojeto">
   </div>
   <div class="mb-5">
       <label for="data-input" class="block mb-2 text-sm font-medium text-gray-900">Data</label>
-      <input type="date" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Data">
+      <input type="date" id="base-input" formControlName="data" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Data">
   </div>
   <div>
       <label for="horas-input" class="block mb-2 text-sm font-medium text-gray-900">Horas</label>
-      <input type="number" id="small-input" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500" placeholder="Quantidade de horas">
+      <input type="number" id="small-input" formControlName="horas" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500" placeholder="Quantidade de horas">
   </div>
   <div class="mb-5">
       <label for="descricao-input" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
-      <input type="text" id="large-input" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500" placeholder="Descreva sobre o apontamento">
+      <input type="text" id="large-input" formControlName="descricao" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-base focus:ring-blue-500 focus:border-blue-500" placeholder="Descreva sobre o apontamento">
   </div>
   <div class="mb-5">
       <label for="upload-input" class="block mb-2 text-sm font-medium text-gray-900">Upload Foto/Vídeo (Opcional)</label>
-      <input type="text" id="small-input" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500" placeholder="Midia">
+      <input type="text" id="small-input" formControlName="midia" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500" placeholder="Midia">
   </div>
   <div class="flex justify-center items-center">
-    <button type="button" class=" w-1/2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Apontar</button>
+    <button type="button" (click)="apontar()" class=" w-1/2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Apontar</button>
   </div>
 </form>
