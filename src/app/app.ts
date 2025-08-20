@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { initFlowbite } from 'flowbite';
@@ -11,7 +12,7 @@ import { initFlowbite } from 'flowbite';
 export class App implements OnInit {
   protected readonly title = signal('gerenciador-extensao');
 
-  constructor(public router: Router) {}
+  constructor(public router: Router, private http: HttpClient) {}
   isLoginPage(): boolean {
     return this.router.url === '/login';
   }

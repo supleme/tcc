@@ -5,6 +5,7 @@ import { Apontamento } from './features/apontamento/apontamento';
 import { Relatorio } from './features/relatorio/relatorio';
 import { Alunos } from './features/alunos/alunos';
 import { Login } from './components/login/login';
+import { CadastroAluno } from './features/cadastro-aluno/cadastro-aluno';
 
 const routes: Routes = [
   {path: '', component: HomeAluno},
@@ -12,6 +13,7 @@ const routes: Routes = [
   {path: 'relatorio', component: Relatorio},
   {path: 'alunos', component: Alunos},
   {path: 'login', component: Login},
+  {path: 'cadastro-aluno', component: CadastroAluno},
 ];
 
 @NgModule({

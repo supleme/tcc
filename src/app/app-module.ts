@@ -9,7 +9,8 @@ import { Relatorio } from './features/relatorio/relatorio';
 import { Alunos } from './features/alunos/alunos';
 import { Login } from './components/login/login';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { HttpClientModule } from '@angular/common/http';
+import { CadastroAluno } from './features/cadastro-aluno/cadastro-aluno';
 @NgModule({
   declarations: [
     App,
@@ -19,14 +20,16 @@ import { ReactiveFormsModule } from '@angular/forms';
     Relatorio,
     Alunos,
     Login,
+    CadastroAluno,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
-    provideBrowserGlobalErrorListeners()
+    provideBrowserGlobalErrorListeners(),
   ],
   bootstrap: [App]
 })

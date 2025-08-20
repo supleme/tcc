@@ -5,11 +5,11 @@
 </div>
 
 <div class="w-4/5 mx-auto justify-end py-2.5 rounded-xl shadow-xl sm:p-8">
-  <h2 class="font-bold">Total: {{ num_alunos }}</h2>
-  <div *ngFor="let aluno of alunos" class="py-2">
+  <h2 class="font-bold">Total: {{ num_students }}</h2>
+  <div *ngFor="let student of students" class="py-2">
     <div class="flex items-center justify-between">
-      <p class="text-start font-medium">{{ aluno.nome }}</p>
-      <button class="rounded-full px-3 py-0.5 bg-blue-500 text-white hover:bg-blue-600 transition" (click)="mostrarInformacoes(aluno)">Informações</button>
+      <p class="text-start font-medium">{{ student.nome }}</p>
+      <button class="rounded-full px-3 py-0.5 bg-blue-500 text-white hover:bg-blue-600 transition" (click)="showInformation(student)">Informações</button>
     </div>
 
     <!-- Linha decorativa com Tailwind -->
@@ -24,9 +24,11 @@
       <button type="button" (click)="fecharModal()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center">&times;</button>
     </div>
     <div class="space-y-2">
-      <p><strong>Nome:</strong> {{ alunoSelecionado?.nome }}</p>
-      <p><strong>RA:</strong> {{ alunoSelecionado?.RA }}</p>
-      <p><strong>Curso:</strong> {{ alunoSelecionado?.curso }}</p>
+      <p><strong>Nome:</strong> {{ studentSelect?.nome }}</p>
+      <p><strong>RA:</strong> {{ studentSelect?.RA }}</p>
+      <p><strong>Curso:</strong> {{ studentSelect?.curso }}</p>
+      <p><strong>Periodo:</strong> {{ studentSelect?.periodo }}</p>
+      <p><strong>Email:</strong> {{ studentSelect?.email }}</p>
     </div>
   </div>
 
