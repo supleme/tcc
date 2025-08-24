@@ -13,13 +13,18 @@
         <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
     </div> -->
       <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
-      <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ">
+      <!-- <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ">
         Atividade
       </button>
       <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ">
         Subprojeto
-      </button>
-      <br><br>
+      </button> -->
+      <select formControlName="categoria" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option selected>Escolha a opção</option>
+        <option value="Atividade">Atividade</option>
+        <option value="Subprojeto">Subprojeto</option>
+      </select>
+      <br>
       <input type="text" formControlName="nomeAtividade" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome do atividade">
   </div>
   <div class="mb-5">
@@ -28,11 +33,11 @@
   </div>
   <div class="mb-5">
       <label for="data-input" class="block mb-2 text-sm font-medium text-gray-900">Data</label>
-      <input type="date" id="base-input" formControlName="data" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Data">
+      <input type="date" required id="base-input" formControlName="data_apontamento" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Data">
   </div>
   <div>
-      <label for="horas-input" class="block mb-2 text-sm font-medium text-gray-900">Horas</label>
-      <input type="number" id="small-input" formControlName="horas" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500" placeholder="Quantidade de horas">
+      <label for="horas-input" required class="block mb-2 text-sm font-medium text-gray-900">Horas</label>
+      <input type="number" id="small-input" formControlName="horas_trabalhadas" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500" placeholder="Quantidade de horas">
   </div>
   <div class="mb-5">
       <label for="descricao-input" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
