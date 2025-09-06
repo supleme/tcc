@@ -4,28 +4,14 @@
 
 <form [formGroup]="apontamentoForm" class="w-4/5 mx-auto justify-end py-2.5 rounded-xl shadow-xl sm:p-8">
   <div class="mb-5">
-    <!-- <div class="flex items-center mb-4">
-        <input id="default-radio-1" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-        <label for="default-radio-1" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Default radio</label>
-    </div>
-    <div class="flex items-center">
-        <input checked id="default-radio-2" type="radio" value="" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-        <label for="default-radio-2" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
-    </div> -->
       <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
-      <!-- <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ">
-        Atividade
-      </button>
-      <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ">
-        Subprojeto
-      </button> -->
       <select formControlName="categoria" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
         <option selected>Escolha a opção</option>
         <option value="Atividade">Atividade</option>
         <option value="Subprojeto">Subprojeto</option>
       </select>
       <br>
-      <input type="text" formControlName="nomeAtividade" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome do atividade">
+      <input type="text" formControlName="nomeCategoria" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome {{ categoria }}">
   </div>
   <div class="mb-5">
       <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Tarefa</label>

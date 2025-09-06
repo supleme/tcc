@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NodeTs } from '../../services/node.ts';
+import { AuthService } from '../../services/auth-service.js';
 
 @Component({
   selector: 'app-home-aluno',
@@ -6,6 +8,28 @@ import { Component } from '@angular/core';
   templateUrl: './home-aluno.html',
   styleUrl: './home-aluno.css'
 })
-export class HomeAluno {
+export class HomeAluno implements OnInit{
+  idStudent: number = 0;
+  activities: any[] = [];
+  subprojects: any[] = [];
 
+  constructor(private serviceNode: NodeTs, private serviceAuth: AuthService) {
+
+  }
+
+  ngOnInit(){
+    this.serviceAuth.getMe().subscribe((res: any) => {
+      this.idStudent = res.id;
+    })
+
+    this.serviceNode.getNodeStudent(this.idStudent).subscribe({
+      next: (response: any) => {
+        this.activities = response.filter((activities: any) => activities.categoria === 'Atividade');
+        this.subprojects = response.filter((subprojects: any) => subprojects.categoria === 'Subprojeto');
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    })
+  }
 }

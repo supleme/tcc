@@ -8,18 +8,18 @@
         </p>
       </div>
 
-      <form class="text-center">
+      <form class="text-center" [formGroup]="loginForm">
         <h3 class="font-bold">Bem-vindo de volta</h3>
         <br>
         <div class="mb-5 text-left">
           <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Usuário</label>
-          <input type="text" id="email" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Usuário" required />
+          <input formControlName="email" type="text" id="email" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Usuário" required />
         </div>
         <div class="mb-5 text-left">
           <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Senha</label>
-          <input type="password" id="password" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Senha" required />
+          <input formControlName="password" type="password" id="password" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Senha" required />
         </div>
-        <button type="button" class="w-full focus:outline-none text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5">Login</button>
+        <button type="button" (click)="login()" class="w-full focus:outline-none text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5" >Login</button>
       </form>
     </div>
   </div>

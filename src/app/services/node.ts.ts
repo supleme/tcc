@@ -17,4 +17,8 @@ export class NodeTs {
   getNode(): any {
     return this.http.get(this.apiUrl);
   }
+
+  getNodeStudent(id: number) {
+    return this.http.get(`${this.apiUrl}/aluno/${id}`);
+  }
 }

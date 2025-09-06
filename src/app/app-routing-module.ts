@@ -6,9 +6,10 @@ import { Relatorio } from './features/relatorio/relatorio';
 import { Alunos } from './features/alunos/alunos';
 import { Login } from './components/login/login';
 import { CadastroAluno } from './features/cadastro-aluno/cadastro-aluno';
+import { AuthGuard } from './guards/auth-guard';
 
 const routes: Routes = [
-  {path: '', component: HomeAluno},
+  {path: '', component: HomeAluno, canActivate: [AuthGuard]},
   {path: 'apontamento', component: Apontamento},
   {path: 'relatorio', component: Relatorio},
   {path: 'alunos', component: Alunos},
