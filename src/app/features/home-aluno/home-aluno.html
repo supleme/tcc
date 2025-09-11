@@ -5,7 +5,7 @@
     </div>
 
     <div class="flow-root">
-      <ul role="list" class="divide-y divide-gray-200">
+      <ul *ngIf="activities.length > 0; else noData" role="list" class="divide-y divide-gray-200">
         <li *ngFor="let activitie of activities" class="py-3 sm:py-4">
           <div class="flex items-center">
             <div class="flex-1 min-w-0 ms-4">
@@ -17,6 +17,10 @@
           </div>
         </li>
       </ul>
+      <ng-template #noData>
+        <p class="text-gray-500 text-center py-4">Não há dados disponíveis.</p>
+      </ng-template>
+
     </div>
   </div>
 
@@ -26,7 +30,7 @@
     </div>
 
     <div class="flow-root">
-      <ul role="list" class="divide-y divide-gray-200">
+      <ul *ngIf="activities.length > 0; else noData" role="list" class="divide-y divide-gray-200">
         <li *ngFor="let subproject of subprojects" class="py-3 sm:py-4">
           <div class="flex items-center">
             <div class="flex-1 min-w-0 ms-4">
@@ -38,6 +42,9 @@
           </div>
         </li>
       </ul>
+      <ng-template #noData>
+        <p class="text-gray-500 text-center py-4">Não há dados disponíveis.</p>
+      </ng-template>
     </div>
   </div>
 
