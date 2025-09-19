@@ -4,20 +4,41 @@
 
 <div class="w-4/5 mx-auto justify-end py-2.5 rounded-xl shadow-xl sm:p-8">
   <div class="flex">
-    <div class="w-1/2 mb-5 justify-start text-start">
-      <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
-      <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-s-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ">
-        Atividade
-      </button>
-      <button type="button" class="px-4 py-2 text-sm font-medium text-gray-900 bg-transparent border border-gray-900 rounded-e-lg hover:bg-gray-900 hover:text-white focus:z-10 focus:ring-2 focus:ring-gray-500 focus:bg-gray-900 focus:text-white ">
-        Subprojeto
-      </button>
-      <br><br>
+    <div class="w-1/2">
+      <form [formGroup]="relatorioForm" class="">
+        <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
+        <div class="flex gap-2 items-center">
+          <div class="w-1/3">
+            <select formControlName="category" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option selected>Todas</option>
+              <option value="Atividade">Atividade</option>
+              <option value="Subprojeto">Subprojeto</option>
+            </select>
+          </div>
+
+
+          <div class="w-full">
+            <select formControlName="students" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option *ngIf="students.length == 0" selected>Todos</option>
+              <option *ngFor="let student of students" [value]="student.id_aluno">{{student.nome}}</option>
+            </select>
+          </div>
+        </div>
+      </form>
     </div>
+
     <div class="w-1/2 mb-5 justify-end text-end">
-      <button type="button" class="mt-6 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Exportar para Excel</button>
+      <button type="button" (click)="ExportExcel()" class="mt-6 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Exportar para Excel</button>
     </div>
   </div>
-
+    <apx-chart
+        [series]="chartOptions.series!"
+        [chart]="chartOptions.chart!"
+        [dataLabels]="chartOptions.dataLabels!"
+        [plotOptions]="chartOptions.plotOptions!"
+        [legend]="chartOptions.legend!"
+        [colors]="chartOptions.colors!"
+        [xaxis]="chartOptions.xaxis!"
+    ></apx-chart>
 </div>
 

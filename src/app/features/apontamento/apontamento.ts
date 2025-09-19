@@ -46,40 +46,44 @@ export class Apontamento implements OnInit{
       let id_aluno = 0;
       this.serviceAuth.getMe().subscribe({
         next: (res: any) => {
+          console.log(res)
           id_aluno = res.id_aluno;
+          console.log(id_aluno)
+          if (this.apontamentoForm.valid) {
+            const formData = this.apontamentoForm.value;
+            console.log('Dados do formulário:', formData);
+
+            formData.id_aluno = id_aluno;
+            console.log(formData);
+
+            this.serviceNode.registerNode(formData).subscribe({
+              next: (response: any) => {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Apontamento criado!',
+                  text: response.message,
+                  confirmButtonColor: '#16a34a'
+                });
+                console.log(response);
+              },
+              error: (error: any) => {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Erro!',
+                  text: error.error?.message || 'Algo deu errado.',
+                  confirmButtonColor: '#dc2626'
+                });
+              }
+            })
+          } else {
+            console.warn('Formulário inválido');
+          }
         },
         error: (err: any) => {
           console.error('Erro ao buscar dados do aluno', err);
         }
       });
-      if (this.apontamentoForm.valid) {
-        const formData = this.apontamentoForm.value;
-        console.log('Dados do formulário:', formData);
 
-        formData.id_aluno = id_aluno;
-
-        this.serviceNode.registerNode(formData).subscribe({
-          next: (response: any) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Apontamento criado!',
-              text: response.message,
-              confirmButtonColor: '#16a34a'
-            });
-            console.log(response);
-          },
-          error: (error: any) => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Erro!',
-              text: error.error?.message || 'Algo deu errado.',
-              confirmButtonColor: '#dc2626' // vermelho Tailwind
-            });
-          }
-        })
-      } else {
-        console.warn('Formulário inválido');
-      }
     }
 
   }

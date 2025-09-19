@@ -18,18 +18,24 @@ export class HomeAluno implements OnInit{
   }
 
   ngOnInit(){
-    this.serviceAuth.getMe().subscribe((res: any) => {
-      this.idStudent = res.id;
-    })
-
-    this.serviceNode.getNodeStudent(this.idStudent).subscribe({
-      next: (response: any) => {
-        this.activities = response.filter((activities: any) => activities.categoria === 'Atividade');
-        this.subprojects = response.filter((subprojects: any) => subprojects.categoria === 'Subprojeto');
+    this.serviceAuth.getMe().subscribe({
+      next: (res: any) => {
+        this.idStudent = res.id_aluno;
+        this.serviceNode.getNodeStudent(this.idStudent).subscribe({
+        next: (response: any) => {
+          this.activities = response.filter((activities: any) => activities.categoria === 'Atividade');
+          this.subprojects = response.filter((subprojects: any) => subprojects.categoria === 'Subprojeto');
+        },
+        error: (error: any) => {
+          console.log(error);
+        }
+      })
       },
       error: (error: any) => {
         console.log(error);
       }
     })
+
+
   }
 }
