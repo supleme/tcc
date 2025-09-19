@@ -12,6 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CadastroAluno } from './features/cadastro-aluno/cadastro-aluno';
 import { jwtInterceptor } from './interceptor/jwt-interceptor';
+import { NgApexchartsModule } from "ng-apexcharts";
+
 @NgModule({
   declarations: [
     App,
@@ -24,6 +26,7 @@ import { jwtInterceptor } from './interceptor/jwt-interceptor';
     CadastroAluno,
   ],
   imports: [
+    NgApexchartsModule,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
