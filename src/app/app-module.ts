@@ -13,6 +13,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CadastroAluno } from './features/cadastro-aluno/cadastro-aluno';
 import { jwtInterceptor } from './interceptor/jwt-interceptor';
 import { NgApexchartsModule } from "ng-apexcharts";
+import { RegisterSubproject } from './features/register-subproject/register-subproject';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
     Alunos,
     Login,
     CadastroAluno,
+    RegisterSubproject,
   ],
   imports: [
     NgApexchartsModule,

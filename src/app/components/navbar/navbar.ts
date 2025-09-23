@@ -23,7 +23,7 @@ export class Navbar {
     if (this.serviceAuth.isAuthenticated()) {
       this.serviceAuth.getMe().subscribe({
         next: (res: any) => {
-          this.alunoNome = res.nome;
+          this.alunoNome = res.name;
           this.alunoRA = res.RA;
         },
         error: (err: any) => {

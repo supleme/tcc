@@ -7,6 +7,7 @@ import { Alunos } from './features/alunos/alunos';
 import { Login } from './components/login/login';
 import { CadastroAluno } from './features/cadastro-aluno/cadastro-aluno';
 import { AuthGuard } from './guards/auth-guard';
+import { RegisterSubproject } from './features/register-subproject/register-subproject';
 
 const routes: Routes = [
   {path: '', component: HomeAluno, canActivate: [AuthGuard]},
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'alunos', component: Alunos , canActivate: [AuthGuard]},
   {path: 'login', component: Login},
   {path: 'cadastro-aluno', component: CadastroAluno, canActivate: [AuthGuard]},
+  {path: 'cadastro-subprojeto', component: RegisterSubproject, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
