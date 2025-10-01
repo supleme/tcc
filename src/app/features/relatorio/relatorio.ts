@@ -26,6 +26,7 @@ import {
   ApexNoData,
 
 } from "ng-apexcharts";
+import { Apontamento } from '../../interfaces/iApontamento';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -50,19 +51,7 @@ export type ChartOptions = {
   noData: ApexNoData;
 };
 
-interface Apontamento {
-  id_apontamento: number;
-  categoria: string;
-  id_aluno: number;
-  data_apontamento: string;
-  horas_trabalhadas: number;
-  midia?: string;
-  id_subprojeto?: number | null;
-  descricao?: string;
-  data_criacao: string;
-  aluno_nome?: string;
-  subprojeto_nome?: string;
-}
+
 
 @Component({
   selector: 'app-relatorio',
@@ -76,6 +65,8 @@ export class Relatorio {
   category: string = '';
   students: any[] = [];
   id_aluno: number = 0;
+  tipoUsuario: string = '';
+  hours_available: number = 0;
   chartOptions: Partial<ChartOptions>;
 
   constructor(private fb: FormBuilder, private serviceStudent: Student, private serviceAuth: AuthService) {
@@ -84,14 +75,10 @@ export class Relatorio {
         chart: {
             height: 350,
             type: 'bar',
-            toolbar: {
-                show: false
-            }
+            toolbar: { show: false}
         },
         plotOptions: {
-            bar: {
-                horizontal: true,
-            }
+            bar: { horizontal: true }
         },
         colors: ['#00E396'],
         dataLabels: {
@@ -111,8 +98,8 @@ export class Relatorio {
                 fillColors: ['#00E396', '#775DD0']
             }
         },
-        xaxis: {}, // Inicialize com um objeto vazio
-        yaxis: {}  // Inicialize com um objeto vazio
+        xaxis: {},
+        yaxis: {}
     };
 
   }
@@ -129,25 +116,21 @@ export class Relatorio {
 
     this.serviceAuth.getMe().subscribe({
       next: (response: any) => {
-        this.id_aluno = response.id_aluno;
+        this.id_aluno = response.id_usuario;
+        this.tipoUsuario = response.type;
+        this.hours_available = response.hours_available;
         this.serviceStudent.getAlunos().subscribe({
           next: (response: any) => {
-            const usuario = this.serviceAuth.getMe();
-            //if (usuario.tipo === 'Aluno') {
-              const aluno = response.find((aluno: any) => aluno.id_aluno === this.id_aluno)
+            if (this.tipoUsuario === 'Student') {
+              const aluno = response.find((aluno: any) => aluno.id_usuario === this.id_aluno)
               this.students = [aluno];
-              this.relatorioForm.patchValue({
-                students: aluno.id_aluno
-              });
-            //}
-            //else {
-              // this.students = response;
-              // this.relatorioForm.patchValue({
-              //   students: 'Todos'
-              //  });
-            // }
+              this.relatorioForm.patchValue({students: aluno.id_usuario});
+            }
+            else {
+              this.students = response;
+              this.relatorioForm.patchValue({students: 'Todos'});
+             }
             // this.students = response;
-            // console.log(response)
             const params = this.relatorioForm.value;
             this.serviceStudent.getNodeStudents(params).subscribe({
               next: (response: any) => {
@@ -184,23 +167,36 @@ export class Relatorio {
       {
         x: 'Atividades',
         y: totalHorasAtividade,
-        goals: [
-          {
-            name: 'Meta',
-            value: 80,
-            strokeWidth: 5,
-            strokeHeight: 10,
-            strokeColor: '#775DD0'
-          }
-        ]
+        // goals: [
+        //   {
+        //     name: 'Meta',
+        //     value: 10,
+        //     strokeWidth: 5,
+        //     strokeHeight: 10,
+        //     strokeColor: '#775DD0'
+        //   }
+        // ]
       },
       {
         x: 'Subprojetos',
         y: totalHorasSubprojeto,
+        // goals: [
+        //   {
+        //     name: 'Meta',
+        //     value: 10,
+        //     strokeWidth: 5,
+        //     strokeHeight: 10,
+        //     strokeColor: '#775DD0'
+        //   }
+        // ]
+      },
+      {
+        x: 'Total',
+        y: totalHorasAtividade + totalHorasSubprojeto,
         goals: [
           {
             name: 'Meta',
-            value: 120,
+            value: this.hours_available * 4,
             strokeWidth: 5,
             strokeHeight: 10,
             strokeColor: '#775DD0'

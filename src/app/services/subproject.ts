@@ -14,4 +14,16 @@ export class Subproject {
   registerSubproject(body: ISubproject){
     return this.http.post(this.apiUrl, body);
   }
+
+  getSubprojects(): any {
+    return this.http.get(this.apiUrl);
+  }
+
+  assignSubproject(subprojectId: number | undefined, userId: any | undefined,){
+    return this.http.post(`${this.apiUrl}/${subprojectId}/users/${userId}`, {});
+  }
+
+  getSubprojectByUser(id: number) {
+    return this.http.get(`${this.apiUrl}/users/${id}`);
+  }
 }

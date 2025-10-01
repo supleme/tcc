@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Student } from '../../services/student';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cadastro-aluno',
@@ -16,16 +17,18 @@ export class CadastroAluno {
   ngOnInit(): void {
     this.cadastroForm = this.fb.group({
       RA: [''],
-      nome: [''],
-      curso: [''],
-      periodo: [''],
-      data_nascimento: [''],
-      endereco: [''],
-      cidade: [''],
-      telefone: [''],
+      name: [''],
+      course: [''],
+      period: [''],
+      birth_date: [''],
+      address: [''],
+      city: [''],
+      telephone: [''],
       email: [''],
       CPF: [''],
-      ativo: [true], // se quiser ter um campo ativo
+      active: [true],
+      hours_available: [''],
+      password: ['']
     });
   }
 
@@ -36,14 +39,32 @@ export class CadastroAluno {
 
       this.serviceStudent.registerStudent(formData).subscribe({
         next: (response: any) => {
-          console.log(response);
+          Swal.fire({
+            icon: 'success',
+            title: 'Aluno criado!',
+            text: response.message,
+            confirmButtonColor: '#16a34a'
+          });
+          return;
         },
         error: (error: any) => {
-          console.log(error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Algo deu errado ao criar aluno!',
+            confirmButtonColor: '#dc2626'
+          });
+          return;
         }
       })
     } else {
-      console.warn('Formulário inválido');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Erro!',
+        text: 'Formulário inconsistente!',
+        confirmButtonColor: '#dc2626'
+      });
+      return;
     }
   }
 

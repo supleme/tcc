@@ -8,28 +8,18 @@
   <h2 class="font-bold">Total: {{ num_students }}</h2>
   <div *ngFor="let student of students" class="py-2">
     <div class="flex items-center justify-between">
-      <p class="text-start font-medium">{{ student.nome }}</p>
-      <button class="rounded-full px-3 py-0.5 bg-blue-500 text-white hover:bg-blue-600 transition" (click)="showInformation(student)">Informações</button>
-    </div>
+      <div>
+        <p class="text-start font-medium">{{ student.name }}</p>
+      </div>
+      <div>
+        <button class="rounded-full px-3 py-0.5 bg-blue-500 text-white hover:bg-blue-600 transition" (click)="showInformation(student)">Informações</button>
+        <button class="rounded-full px-3 py-0.5 ml-2.5 bg-green-500 text-white hover:bg-green-600 transition" (click)="assignSubproject(student)">Atribuir Subprojeto</button>
+      </div>
+       </div>
 
     <!-- Linha decorativa com Tailwind -->
     <div class="border-b border-gray-300 my-2"></div>
   </div>
 </div>
-
-<div id="modalAluno" class="bg-black/60 w-full h-full fixed top-0 left-0 right-0 z-[99] flex items-center justify-center hidden">
-  <div class="bg-white rounded-lg shadow p-6 min-w-[30%] h-[30%]">
-    <div class="flex justify-between items-center mb-4">
-      <h3 class="text-xl font-semibold">Informações do Aluno</h3>
-      <button type="button" (click)="fecharModal()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center">&times;</button>
-    </div>
-    <div class="space-y-2">
-      <p><strong>Nome:</strong> {{ studentSelect?.nome }}</p>
-      <p><strong>RA:</strong> {{ studentSelect?.RA }}</p>
-      <p><strong>Curso:</strong> {{ studentSelect?.curso }}</p>
-      <p><strong>Periodo:</strong> {{ studentSelect?.periodo }}</p>
-      <p><strong>Email:</strong> {{ studentSelect?.email }}</p>
-    </div>
-  </div>
-
-</div>
+<app-modal-informations-student *ngIf="isModalInfOpen" [studentSelect]="studentSelect" (fecharModal)="fecharModalInf()"></app-modal-informations-student>
+<app-modal-assign-subproject *ngIf="isModalSubOpen" [studentSelect]="studentSelect" (fecharModal)="fecharModalSub()"></app-modal-assign-subproject>

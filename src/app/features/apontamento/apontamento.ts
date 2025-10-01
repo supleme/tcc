@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NodeTs } from '../../services/node.ts';
 import { AuthService } from '../../services/auth-service.js';
 import Swal from 'sweetalert2';
+import { Subproject } from '../../services/subproject.js';
+import { ISubproject } from '../../interfaces/iSubproject.js';
 
 @Component({
   selector: 'app-apontamento',
@@ -13,13 +15,19 @@ import Swal from 'sweetalert2';
 export class Apontamento implements OnInit{
   apontamentoForm: any;
   categoria: string = '';
+  id_aluno: number = 0;
+  subprojects: ISubproject[] = [];
 
-  constructor(private fb: FormBuilder, private serviceNode: NodeTs, private serviceAuth: AuthService) {}
+  constructor(private fb: FormBuilder,
+              private serviceNode: NodeTs,
+              private serviceAuth: AuthService,
+              private serviceSubproject: Subproject) {}
 
   ngOnInit(): void {
     this.apontamentoForm = this.fb.group({
       categoria: ['Escolha a opção'],
-      nomeCategoria: [''],
+      atividade: [''],
+      id_subprojeto: [0],
       tarefa: [{ value: '', disabled: true }],
       data_apontamento: [''],
       horas_trabalhadas: [''],
@@ -39,52 +47,62 @@ export class Apontamento implements OnInit{
         tarefaControl?.enable();
       }
     });
+    this.serviceAuth.getMe().subscribe({
+      next: (res: any) => {
+        this.id_aluno = res.id_usuario;
+        this.serviceSubproject.getSubprojectByUser(this.id_aluno).subscribe({
+          next: (response: any) => {
+            console.log('Subprojetos:', response.subprojects);
+            this.subprojects = response.subprojects;
+          },
+          error: (error: any) => {
+            console.log(error);
+          }
+        })
+      }
+    });
   }
 
   apontar(){
-    if(this.serviceAuth.isAuthenticated()){
-      let id_aluno = 0;
-      this.serviceAuth.getMe().subscribe({
-        next: (res: any) => {
-          console.log(res)
-          id_aluno = res.id_aluno;
-          console.log(id_aluno)
-          if (this.apontamentoForm.valid) {
-            const formData = this.apontamentoForm.value;
-            console.log('Dados do formulário:', formData);
+    if (this.apontamentoForm.valid) {
+      const formData = this.apontamentoForm.value;
+      formData.id_usuario = this.id_aluno;
 
-            formData.id_aluno = id_aluno;
-            console.log(formData);
+      if(formData.categoria === 'Atividade'){
+        formData.id_subprojeto = 0;
+        formData.tarefa = '';
+      } else if (formData.categoria === 'Subprojeto') {
+        formData.atividade = '';
+      }
 
-            this.serviceNode.registerNode(formData).subscribe({
-              next: (response: any) => {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Apontamento criado!',
-                  text: response.message,
-                  confirmButtonColor: '#16a34a'
-                });
-                console.log(response);
-              },
-              error: (error: any) => {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Erro!',
-                  text: error.error?.message || 'Algo deu errado.',
-                  confirmButtonColor: '#dc2626'
-                });
-              }
-            })
-          } else {
-            console.warn('Formulário inválido');
-          }
+      this.serviceNode.registerNode(formData).subscribe({
+        next: (response: any) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Apontamento criado!',
+            text: response.message,
+            confirmButtonColor: '#16a34a'
+          });
+          return;
         },
-        error: (err: any) => {
-          console.error('Erro ao buscar dados do aluno', err);
+        error: (error: any) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: error.error?.message || 'Algo deu errado.',
+            confirmButtonColor: '#dc2626'
+          });
+          return;
         }
+      })
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro!',
+        text: 'Formulário inválido!.',
+        confirmButtonColor: '#dc2626'
       });
-
+      return;
     }
-
   }
 }

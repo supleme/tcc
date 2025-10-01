@@ -10,13 +10,24 @@
         <option value="Atividade">Atividade</option>
         <option value="Subprojeto">Subprojeto</option>
       </select>
-      <br>
-      <input type="text" formControlName="nomeCategoria" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome {{ categoria }}">
+</div>
+  <div *ngIf="categoria === 'Atividade'" class="mb-5">
+    <label  for="base-input" class="block mb-2 text-sm font-medium text-gray-900">Atividade</label>
+    <input type="text" formControlName="atividade" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome {{ categoria }}">
+
   </div>
-  <div class="mb-5">
-      <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Tarefa</label>
-      <input type="text" id="base-input" formControlName="tarefa" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Tarefa do subprojeto">
+  <div *ngIf="categoria === 'Subprojeto'" class="mb-5">
+      <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Subprojeto</label>
+      <select formControlName="id_subprojeto" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+          <option value="">Selecione um subprojeto</option>
+          <option *ngFor="let subproject of subprojects" [ngValue]="subproject.id_subproject">
+            {{ subproject.name }}
+          </option>
+        </select>
   </div>
+  <div *ngIf="categoria === 'Subprojeto'" class="mb-5">
+      <input  type="text" id="base-input" formControlName="tarefa" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Tarefa do subprojeto">
+    </div>
   <div class="mb-5">
       <label for="data-input" class="block mb-2 text-sm font-medium text-gray-900">Data</label>
       <input type="date" required id="base-input" formControlName="data_apontamento" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Data">
