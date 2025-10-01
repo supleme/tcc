@@ -1,0 +1,32 @@
+<div *ngIf="!loading" id="modalAssignSubproject"
+     class="bg-black/60 w-full h-full fixed top-0 left-0 right-0 z-[99] flex items-center justify-center">
+  <div class="relative p-4 w-full max-w-2xl max-h-full">
+    <div class="bg-white rounded-lg shadow p-6 min-w-[80%] h-[80%]">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold">Subprojetos</h3>
+        <button type="button" (click)="close()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center">&times;</button>
+      </div>
+
+      <div class="mb-4">
+        <label for="subproject" class="block mb-2 text-sm font-medium text-gray-900">
+          Escolha um subprojeto para atribuir ao aluno <strong>{{ studentSelect?.name }}</strong>
+        </label>
+        <select id="subproject"
+                 (change)="onChangeSubproject($event)"
+                class="border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5">
+          <option selected>Escolha um subprojeto</option>
+          <option *ngFor="let subproject of subprojects"
+                  [value]="subproject.id_subproject">
+            {{ subproject.name }} - {{ subproject.description }}
+          </option>
+        </select>
+      </div>
+      <div class="flex justify-end mt-4">
+        <button (click)="assignSubproject()"
+                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          Atribuir
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

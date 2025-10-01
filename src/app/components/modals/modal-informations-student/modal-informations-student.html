@@ -1,0 +1,25 @@
+<div id="modalInformationsStudent"
+     class="bg-black/60 w-full h-full fixed top-0 left-0 right-0 z-[99] flex items-center justify-center">
+  <div class="relative p-4 w-full max-w-2xl max-h-full">
+    <div class="bg-white rounded-lg shadow p-6 min-w-[80%] h-[80%]">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold">Informações do Aluno</h3>
+        <button type="button" (click)="close()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center">&times;</button>
+      </div>
+
+      <div class="space-y-2" *ngIf="studentSelect">
+        <p><strong>Nome:</strong> {{ studentSelect.name }}</p>
+        <p><strong>CPF:</strong> {{ studentSelect.CPF }}</p>
+        <p><strong>RA:</strong> {{ studentSelect.RA }}</p>
+        <p><strong>Curso:</strong> {{ studentSelect.course }}</p>
+        <p><strong>Período:</strong> {{ studentSelect.period }}</p>
+        <p><strong>Cidade:</strong> {{ studentSelect.city }}</p>
+        <p><strong>Endereço:</strong> {{ studentSelect.address }}</p>
+        <p><strong>Email:</strong> {{ studentSelect.email }}</p>
+        <p><strong>Telefone:</strong> {{ studentSelect.telephone }}</p>
+        <p><strong>Data de aniversário:</strong> {{ studentSelect.birth_date }}</p>
+        <p><strong>Horas disponiveis(Por Semana):</strong> {{ studentSelect.hours_available }}</p>
+      </div>
+    </div>
+  </div>
+</div>

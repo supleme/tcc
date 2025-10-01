@@ -14,6 +14,8 @@ import { CadastroAluno } from './features/cadastro-aluno/cadastro-aluno';
 import { jwtInterceptor } from './interceptor/jwt-interceptor';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { RegisterSubproject } from './features/register-subproject/register-subproject';
+import { ModalInformationsStudent } from './components/modals/modal-informations-student/modal-informations-student';
+import { ModalAssignSubproject } from './components/modals/modal-assign-subproject/modal-assign-subproject';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { RegisterSubproject } from './features/register-subproject/register-subp
     Login,
     CadastroAluno,
     RegisterSubproject,
+    ModalInformationsStudent,
+    ModalAssignSubproject,
   ],
   imports: [
     NgApexchartsModule,

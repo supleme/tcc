@@ -10,6 +10,8 @@ import { AuthService } from '../../services/auth-service.js';
 })
 export class HomeAluno implements OnInit{
   idStudent: number = 0;
+  hoursAvailable: number = 0;
+  monthlySummary: any[] = [];
   activities: any[] = [];
   subprojects: any[] = [];
 
@@ -20,22 +22,37 @@ export class HomeAluno implements OnInit{
   ngOnInit(){
     this.serviceAuth.getMe().subscribe({
       next: (res: any) => {
-        this.idStudent = res.id_aluno;
+        this.idStudent = res.id_usuario;
+        this.hoursAvailable = res.hours_available;
         this.serviceNode.getNodeStudent(this.idStudent).subscribe({
-        next: (response: any) => {
-          this.activities = response.filter((activities: any) => activities.categoria === 'Atividade');
-          this.subprojects = response.filter((subprojects: any) => subprojects.categoria === 'Subprojeto');
-        },
-        error: (error: any) => {
-          console.log(error);
-        }
-      })
+          next: (response: any) => {
+            this.monthlySummary = response.summaryMonthly;
+            this.activities = response.apontamentos.filter((activities: any) => activities.categoria === 'Atividade');
+            const subprojects = response.apontamentos.filter((subprojects: any) => subprojects.categoria === 'Subprojeto');
+
+            const map = new Map<number, any>();
+            subprojects.forEach((subproject: any) => {
+              if(!map.has(subproject.id_subprojeto)){
+                map.set(subproject.id_subprojeto, subproject);
+              }
+            })
+            this.subprojects = Array.from(map.values());
+          },
+          error: (error: any) => {
+            console.log(error);
+          }
+        })
       },
       error: (error: any) => {
         console.log(error);
       }
     })
+  }
 
-
+  getPercentage(hoursWorked: number): number {
+    if (this.hoursAvailable > 0) {
+      return Math.min(100, (hoursWorked / (this.hoursAvailable * 4)) * 100);
+    }
+    return 0;
   }
 }

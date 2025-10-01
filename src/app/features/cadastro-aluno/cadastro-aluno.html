@@ -9,31 +9,31 @@
   </div>
   <div class="mb-5">
       <label class="block mb-2 text-sm font-medium text-gray-900">Nome</label>
-      <input type="text" formControlName="nome" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome">
+      <input type="text" formControlName="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nome">
   </div>
   <div class="mb-5">
       <label class="block mb-2 text-sm font-medium text-gray-900">Curso</label>
-      <input type="text" formControlName="curso" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Curso">
+      <input type="text" formControlName="course" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Curso">
   </div>
    <div>
       <label class="block mb-2 text-sm font-medium text-gray-900">Periodo</label>
-      <input type="number" formControlName="periodo" class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Periodo">
+      <input type="number" formControlName="period" class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Periodo">
   </div>
   <div class="mb-5">
       <label class="block mb-2 text-sm font-medium text-gray-900">Data Nascimento</label>
-      <input type="date" formControlName="data_nascimento" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Data de nascimento">
+      <input type="date" formControlName="birth_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Data de nascimento">
   </div>
   <div class="mb-5">
       <label class="block mb-2 text-sm font-medium text-gray-900">Endereço</label>
-      <input type="text" formControlName="endereco" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Endereco">
+      <input type="text" formControlName="address" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Endereco">
   </div>
   <div class="mb-5">
       <label class="block mb-2 text-sm font-medium text-gray-900">Cidade</label>
-      <input type="text" formControlName="cidade" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Cidade">
+      <input type="text" formControlName="city" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Cidade">
   </div>
   <div class="mb-5">
       <label class="block mb-2 text-sm font-medium text-gray-900">Telefone</label>
-      <input type="text" formControlName="telefone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Telefone">
+      <input type="text" formControlName="telephone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Telefone">
   </div>
   <div class="mb-5">
       <label class="block mb-2 text-sm font-medium text-gray-900">Email</label>
@@ -43,7 +43,15 @@
       <label class="block mb-2 text-sm font-medium text-gray-900">CPF</label>
       <input type="text" formControlName="CPF" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Cpf">
   </div>
+  <div class="mb-5">
+      <label class="block mb-2 text-sm font-medium text-gray-900">Horas disponíveis(Por semana)</label>
+      <input type="text" formControlName="hours_available" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Horas disponíveis">
+  </div>
+  <div class="mb-5">
+      <label class="block mb-2 text-sm font-medium text-gray-900">Senha</label>
+      <input type="password" formControlName="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Senha">
+  </div>
   <div class="flex justify-center items-center">
-    <button type="button" (click)="apontar()" class=" w-1/2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Apontar</button>
+    <button type="button" (click)="apontar()" class=" w-1/2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Cadastrar</button>
   </div>
 </form>
