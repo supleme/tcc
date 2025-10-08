@@ -8,6 +8,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 export class AuthService {
   private apiUrl = 'http://localhost:8000/api';
   private authState = new BehaviorSubject<boolean>(this.hasToken());
+  private userSubject = new BehaviorSubject<any>(this.getStoredUser());
 
   constructor(private http: HttpClient) {}
 
@@ -25,8 +26,10 @@ export class AuthService {
   }
 
   logout() {
+    localStorage.removeItem('user');
     localStorage.removeItem('token');
     this.authState.next(false);
+    this.userSubject.next(null);
   }
 
   isAuthenticated(): boolean {
@@ -42,5 +45,23 @@ export class AuthService {
     if (!token) return new Observable(observer => observer.error('Token não encontrado'));
 
     return this.http.get(`${this.apiUrl}/me`);
+  }
+
+  private getStoredUser(): any {
+    const stored = localStorage.getItem('user');
+    return stored ? JSON.parse(stored) : null;
+  }
+
+  setUser(user: any) {
+    localStorage.setItem('user', JSON.stringify(user));
+    this.userSubject.next(user);
+  }
+
+  getUser(): any {
+    return this.userSubject.value;
+  }
+
+  userChanges(): Observable<any> {
+    return this.userSubject.asObservable();
   }
 }

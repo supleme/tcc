@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Route, Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
 
 @Component({
@@ -12,6 +12,7 @@ export class Navbar {
   currentUrl: string = '';
   alunoNome: string = '';
   alunoRA: string = '';
+  allowedRoutes: Route[] = [];
 
   constructor(private router: Router, private serviceAuth: AuthService) {
     this.router.events.subscribe(() => {
@@ -20,17 +21,32 @@ export class Navbar {
   }
 
   ngOnInit(): void {
-    if (this.serviceAuth.isAuthenticated()) {
-      this.serviceAuth.getMe().subscribe({
-        next: (res: any) => {
-          this.alunoNome = res.name;
-          this.alunoRA = res.RA;
-        },
-        error: (err: any) => {
-          console.error('Erro ao buscar dados do aluno', err);
-        }
-      });
+    const user = this.serviceAuth.getUser();
+    if (user) {
+      this.setUserRoutes(user);
     }
+
+    this.serviceAuth.userChanges().subscribe(aluno => {
+      if (aluno) {
+        this.setUserRoutes(aluno);
+      } else {
+        this.alunoNome = '';
+        this.alunoRA = '';
+        this.allowedRoutes = [];
+      }
+    });
+  }
+
+  private setUserRoutes(user: any) {
+    this.alunoNome = user.name;
+    this.alunoRA = user.RA;
+
+    this.allowedRoutes = this.router.config.filter(route => {
+      if (!route.data || !route.data['roles']) return true;
+      const roles: string[] = route.data['roles'];
+      return roles.includes(user.type)
+    });
+    this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== 'login');
   }
 
   isActive(path: string): boolean {

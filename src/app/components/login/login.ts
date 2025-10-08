@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { AuthService } from '../../services/auth-service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -24,12 +25,33 @@ export class Login {
 
       this.serviceAuth.login(email, password).subscribe({
         next: (res: any) => {
-          console.log('Login bem-sucedido', res);
+          console.log('res.access_token', res.access_token);
           this.serviceAuth.setToken(res.access_token);
-          this.router.navigate(['/']);
+
+          this.serviceAuth.getMe().subscribe({
+            next: (res: any) => {
+              this.serviceAuth.setUser(res);
+              if (res.type === 'Student') {
+                this.router.navigate(['']);
+              } else if (res.type === 'Coordinator') {
+                this.router.navigate(['alunos']);
+              } else {
+                this.router.navigate(['/login']);
+              }
+            },
+            error: (err: any) => {
+              console.error('Erro ao buscar dados do usuário', err);
+            }
+          });
         },
         error: (err: any) => {
-          console.error('Erro no login', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: err.error?.message || 'Algo deu errado.',
+            confirmButtonColor: '#dc2626'
+          });
+          return;
         }
       });
     } else {
