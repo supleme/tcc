@@ -73,6 +73,15 @@ export class Apontamento implements OnInit{
         formData.tarefa = '';
       } else if (formData.categoria === 'Subprojeto') {
         formData.atividade = '';
+        if (formData.id_subprojeto == 0) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Selecione um subprojeto válido.',
+            confirmButtonColor: '#dc2626'
+          });
+          return;
+        }
       }
 
       this.serviceNode.registerNode(formData).subscribe({

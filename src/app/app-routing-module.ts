@@ -10,13 +10,13 @@ import { AuthGuard } from './guards/auth-guard';
 import { RegisterSubproject } from './features/register-subproject/register-subproject';
 
 const routes: Routes = [
-  {path: '', component: HomeAluno, canActivate: [AuthGuard], data: { roles: ['Student'] }},
+  {path: '', component: HomeAluno, canActivate: [AuthGuard], data: { roles: ['Student'], title: 'Home' } },
   {path: 'apontamento', component: Apontamento, canActivate: [AuthGuard], data: { roles: ['Student'] } },
-  {path: 'relatorio', component: Relatorio , canActivate: [AuthGuard], },
-  {path: 'alunos', component: Alunos , canActivate: [AuthGuard], data: { roles: ['Coordinator'] }},
+  {path: 'relatorio', component: Relatorio , canActivate: [AuthGuard], title: 'Relatório' },
+  {path: 'alunos', component: Alunos, canActivate: [AuthGuard], data: { roles: ['Coordinator'], title: 'Gerenciar Alunos' } },
   {path: 'login', component: Login},
-  {path: 'cadastro-aluno', component: CadastroAluno, data: { roles: ['Coordinator'] }},
-  {path: 'cadastro-subprojeto', component: RegisterSubproject, canActivate: [AuthGuard], data: { roles: ['Coordinator'] }}
+  {path: 'cadastro-aluno', component: CadastroAluno, data: { roles: ['Coordinator'], title: 'Cadastrar Aluno' }},
+  {path: 'cadastro-subprojeto', component: RegisterSubproject, canActivate: [AuthGuard], data: { roles: ['Coordinator'], title: 'Cadastrar Subprojeto'} }
 ];
 
 @NgModule({

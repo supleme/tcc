@@ -38,6 +38,12 @@ export class Login {
               } else {
                 this.router.navigate(['/login']);
               }
+              Swal.fire({
+                icon: 'success',
+                title: 'Logado com sucesso!',
+                text: 'Bem-vindo de volta ' + res.name,
+                confirmButtonColor: '#16a34a'
+              });
             },
             error: (err: any) => {
               console.error('Erro ao buscar dados do usuário', err);

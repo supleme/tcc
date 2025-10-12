@@ -37,17 +37,45 @@ export class Navbar {
     });
   }
 
-  private setUserRoutes(user: any) {
-    this.alunoNome = user.name;
-    this.alunoRA = user.RA;
+  // private setUserRoutes(user: any) {
+  //   this.alunoNome = user.name;
+  //   this.alunoRA = user.RA;
 
-    this.allowedRoutes = this.router.config.filter(route => {
-      if (!route.data || !route.data['roles']) return true;
-      const roles: string[] = route.data['roles'];
-      return roles.includes(user.type)
-    });
-    this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== 'login');
+  //   this.allowedRoutes = this.router.config.filter(route => {
+  //     if (!route.data || !route.data['roles']) return true;
+  //     const roles: string[] = route.data['roles'];
+  //     return roles.includes(user.type)
+  //   });
+  //   this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== 'login');
+  // }
+
+  private setUserRoutes(user: any) {
+  this.alunoNome = user.name;
+  this.alunoRA = user.RA;
+
+  const homeRoute = this.router.config.find(route => route.path === '');
+
+  this.allowedRoutes = this.router.config.filter(route => {
+    if (!route.data || !route.data['roles']) return true;
+    const roles: string[] = route.data['roles'];
+    return roles.includes(user.type);
+  });
+
+  // Garante que a rota '' (Home) sempre apareça
+  if (homeRoute && !this.allowedRoutes.includes(homeRoute)) {
+    this.allowedRoutes.unshift(homeRoute);
   }
+
+  // Remove rota de login
+  this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== 'login');
+
+  // Ajusta os títulos das rotas
+  this.allowedRoutes = this.allowedRoutes.map(route => ({
+    ...route,
+    data: { ...route.data, title: route.data?.['title'] || route.path || 'Início' }
+  }));
+}
+
 
   isActive(path: string): boolean {
     return this.currentUrl === path;
