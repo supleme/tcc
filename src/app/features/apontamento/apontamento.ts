@@ -17,6 +17,9 @@ export class Apontamento implements OnInit{
   categoria: string = '';
   id_aluno: number = 0;
   subprojects: ISubproject[] = [];
+  selectedFile: File | null = null;
+  previewUrl: string | ArrayBuffer | null = null;
+
 
   constructor(private fb: FormBuilder,
               private serviceNode: NodeTs,
@@ -63,55 +66,94 @@ export class Apontamento implements OnInit{
     });
   }
 
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = () => (this.previewUrl = reader.result);
+      reader.readAsDataURL(file);
+    }
+  }
+
   apontar(){
-    if (this.apontamentoForm.valid) {
-      const formData = this.apontamentoForm.value;
-      formData.id_usuario = this.id_aluno;
-
-      if(formData.categoria === 'Atividade'){
-        formData.id_subprojeto = 0;
-        formData.tarefa = '';
-      } else if (formData.categoria === 'Subprojeto') {
-        formData.atividade = '';
-        if (formData.id_subprojeto == 0) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Erro!',
-            text: 'Selecione um subprojeto válido.',
-            confirmButtonColor: '#dc2626'
-          });
-          return;
-        }
-      }
-
-      this.serviceNode.registerNode(formData).subscribe({
-        next: (response: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Apontamento criado!',
-            text: response.message,
-            confirmButtonColor: '#16a34a'
-          });
-          return;
-        },
-        error: (error: any) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Erro!',
-            text: error.error?.message || 'Algo deu errado.',
-            confirmButtonColor: '#dc2626'
-          });
-          return;
-        }
-      })
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro!',
-        text: 'Formulário inválido!.',
-        confirmButtonColor: '#dc2626'
-      });
+    if (!this.apontamentoForm.valid) {
+      this.mostrarErro('Formulário inválido!');
       return;
     }
+
+    const formData = new FormData();
+    const formValues = this.apontamentoForm.value;
+    for (const key in formValues) {
+      if (key !== 'midia') {
+          formData.append(key, formValues[key] === null ? '' : formValues[key]);
+      }
+    }
+
+    formData.append('id_usuario', this.id_aluno.toString());
+
+    if (this.selectedFile) {
+        formData.append('midia', this.selectedFile, this.selectedFile.name);
+    }
+
+    const erro = this.validarForm(formData);
+    if (erro) {
+      this.mostrarErro(erro);
+      return;
+    }
+
+    if (formValues.categoria === 'Atividade') {
+      formData.set('id_subprojeto', '0');
+      formData.set('tarefa', '');
+    } else if (formValues.categoria === 'Subprojeto') {
+      formData.set('atividade', '');
+    }
+
+    this.serviceNode.registerNode(formData).subscribe({
+      next: (response: any) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Apontamento criado!',
+          text: response.message,
+          confirmButtonColor: '#16a34a'
+        });
+      },
+      error: (error: any) => {
+        this.mostrarErro(error.error?.message || 'Algo deu errado.');
+      }
+    });
+  }
+
+  private validarForm(formData: any): string | null {
+    if (formData.categoria === 'Escolha a opção') {
+      return 'Selecione uma categoria válida.';
+    }
+
+    if (formData.categoria === 'Atividade') {
+      if (formData.atividade.trim() === '') {
+        return 'Preencha a atividade.';
+      }
+    }
+
+    if (formData.categoria === 'Subprojeto') {
+      if (formData.id_subprojeto == 0) {
+        return 'Selecione um subprojeto válido.';
+      }
+      if (formData.tarefa.trim() === '') {
+        return 'Preencha a tarefa.';
+      }
+    }
+
+    return null;
+  }
+
+  private mostrarErro(mensagem: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Erro!',
+      text: mensagem,
+      confirmButtonColor: '#dc2626'
+    });
   }
 }

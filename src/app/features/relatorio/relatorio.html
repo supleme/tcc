@@ -19,8 +19,8 @@
 
           <div class="w-full" *ngIf="this.tipoUsuario !== 'Student'">
             <select formControlName="students" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              <option *ngIf="students.length == 0" selected>Todos</option>
-              <option *ngFor="let student of students" [value]="student.id_aluno">{{student.nome}}</option>
+              <option *ngIf="students.length > 0" value="Todos" selected>Todos</option>
+              <option *ngFor="let student of students" [value]="student.id_usuario">{{student.name}}</option>
             </select>
           </div>
         </div>
@@ -29,6 +29,7 @@
 
     <div class="w-1/2 mb-5 justify-end text-end">
       <button type="button" (click)="ExportExcel()" class="mt-6 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Exportar para Excel</button>
+      <button type="button" (click)="ExportWord()" class="mt-6 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Exportar para Word</button>
     </div>
   </div>
     <apx-chart

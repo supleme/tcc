@@ -9,7 +9,7 @@ export class NodeTs {
 
   constructor( private http: HttpClient){}
 
-  registerNode(body: any) {
+  registerNode(body: FormData) {
     return this.http.post(this.apiUrl, body);
   }
 
