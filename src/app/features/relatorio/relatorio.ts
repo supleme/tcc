@@ -27,6 +27,7 @@ import {
 
 } from "ng-apexcharts";
 import { Apontamento } from '../../interfaces/iApontamento';
+import { environment } from '../../environments/environment';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -68,6 +69,7 @@ export class Relatorio {
   tipoUsuario: string = '';
   hours_available: number = 0;
   chartOptions: Partial<ChartOptions>;
+  private readonly API_BASE_URL = environment.storageBaseUrl;
 
   constructor(private fb: FormBuilder, private serviceStudent: Student, private serviceAuth: AuthService) {
     this.chartOptions = {
@@ -114,44 +116,80 @@ export class Relatorio {
       this.category = valor;
     });
 
-    this.serviceAuth.getMe().subscribe({
+    const user = this.serviceAuth.getUser();
+    if (!user) {
+      console.error('Usuário não encontrado no localStorage');
+      return;
+    }
+
+    this.id_aluno = user.id_usuario;
+    this.tipoUsuario = user.type;
+    this.hours_available = user.hours_available ?? 0;
+
+    this.serviceStudent.getAlunos().subscribe({
+
       next: (response: any) => {
-        this.id_aluno = response.id_usuario;
-        this.tipoUsuario = response.type;
-        this.hours_available = response.hours_available;
-        this.serviceStudent.getAlunos().subscribe({
-          next: (response: any) => {
-            if (this.tipoUsuario === 'Student') {
-              const aluno = response.find((aluno: any) => aluno.id_usuario === this.id_aluno)
-              this.students = [aluno];
-              this.relatorioForm.patchValue({students: aluno.id_usuario});
-            }
-            else {
-              this.students = response;
-              this.relatorioForm.patchValue({students: 'Todos'});
-             }
-            // this.students = response;
-            const params = this.relatorioForm.value;
-            this.serviceStudent.getNodeStudents(params).subscribe({
-              next: (response: any) => {
-                console.log(response);
-                const apontamentos: Apontamento[] = Object.values(response);
-                this.chartOptions = {
-                  ...this.chartOptions,
-                  ...this.generateChartData(apontamentos)
-                }
-              },
-              error: (error: any) => {
-                console.log(error);
-              }
-            })
-          },
-          error: (error: any) => {
-            console.log(error);
+        if (this.tipoUsuario === 'Student') {
+          const aluno = response.find((aluno: any) => aluno.id_usuario === this.id_aluno)
+          this.students = [aluno];
+          this.relatorioForm.patchValue({students: aluno.id_usuario});
+        }
+        else {
+          this.students = response;
+          this.relatorioForm.patchValue({students: 'Todos'});
+        }
+        const params = this.relatorioForm.value;
+        this.loadChartData(params);
+
+        this.relatorioForm.get('students')?.valueChanges.subscribe((idAlunoSelecionado: string | number) => {
+          if (!idAlunoSelecionado || idAlunoSelecionado === 'Todos') {
+            const params = {
+              category: this.relatorioForm.get('category')?.value,
+              students: 'Todos'
+            };
+            this.loadChartData(params);
+          } else {
+            const params = {
+              category: this.relatorioForm.get('category')?.value,
+              students: idAlunoSelecionado
+            };
+            console.log('else', params);
+            this.loadChartData(params);
           }
-        })
+        });
+
+        this.relatorioForm.get('category')?.valueChanges.subscribe((categoriaSelecionada: string) => {
+          const idAlunoSelecionado = this.relatorioForm.get('students')?.value;
+
+          const params = {
+            category: categoriaSelecionada || 'Todas',
+            students: !idAlunoSelecionado || idAlunoSelecionado === 'Todos' ? 'Todos' : idAlunoSelecionado
+          };
+
+          console.log('Mudança de categoria', params);
+          this.loadChartData(params);
+        });
+      },
+      error: (error: any) => {
+        console.log(error);
       }
-    })
+    });
+  }
+
+  loadChartData(params: any) {
+    console.log('Carregando dados com parâmetros:', params);
+    this.serviceStudent.getNodeStudents(params).subscribe({
+      next: (response: any) => {
+        const apontamentos: Apontamento[] = Object.values(response);
+        this.chartOptions = {
+          ...this.chartOptions,
+          ...this.generateChartData(apontamentos)
+        };
+      },
+      error: (error: any) => {
+        console.error('Erro ao carregar dados:', error);
+      }
+    });
   }
 
   generateChartData(apontamentos: Apontamento[]): Partial<ChartOptions> {
@@ -307,4 +345,118 @@ export class Relatorio {
       });
     }
   }
+
+  ExportWord() {
+    if (!this.relatorioForm.valid) {
+      return;
+    }
+    const params = this.relatorioForm.value;
+
+    this.serviceStudent.getNodeStudents(params).subscribe({
+        next: (response: any) => {
+            const apontamentos: Apontamento[] = Object.values(response);
+
+            const htmlContent = this.generateHtmlForWord(apontamentos);
+
+            const blob = new Blob(['\ufeff', htmlContent], {
+                type: 'application/msword'
+            });
+
+            saveAs(blob, `Relatorio_Apontamentos.doc`);
+        },
+        error: (error: any) => {
+            console.error('Erro ao carregar dados para exportação Word:', error);
+        }
+    });
+  }
+
+  generateHtmlForWord(apontamentos: Apontamento[]): string {
+    const alunosMap = new Map<string, Apontamento[]>();
+    const COLSPAN_COUNT = 3;
+    apontamentos.forEach(ap => {
+        const alunoNome = ap.aluno_nome || 'Aluno Desconhecido';
+        if (!alunosMap.has(alunoNome)) {
+            alunosMap.set(alunoNome, []);
+        }
+        alunosMap.get(alunoNome)?.push(ap);
+    });
+
+    let totalGeralAtividade = 0;
+    let totalGeralSubprojeto = 0;
+
+    let html = '<html><head><meta charset="utf-8"></head><body>';
+    html += '<h1>Relatório de Apontamentos</h1>';
+
+    alunosMap.forEach((apontamentosAluno, alunoNome) => {
+        html += `<h2>Aluno: ${alunoNome}</h2>`;
+        html += '<table border="1" style="width:100%; border-collapse: collapse;">';
+
+        html += '<thead><tr><th>Categoria</th><th>Descrição</th><th>Horas</th></tr></thead><tbody>';
+
+        const totalHorasAtividade = apontamentosAluno
+            .filter(ap => ap.categoria === 'Atividade')
+            .reduce((sum, ap) => sum + (ap.horas_trabalhadas || 0), 0);
+
+        const totalHorasSubprojeto = apontamentosAluno
+            .filter(ap => ap.categoria === 'Subprojeto')
+            .reduce((sum, ap) => sum + (ap.horas_trabalhadas || 0), 0);
+
+        totalGeralAtividade += totalHorasAtividade;
+        totalGeralSubprojeto += totalHorasSubprojeto;
+
+        apontamentosAluno.forEach(ap => {
+            const mediaUrl = ap.midia ? `${this.API_BASE_URL}/${ap.midia}` : null;
+            html += `
+                <tr>
+                    <td>${ap.categoria ?? '---'}</td>
+                    <td>${ap.descricao ?? '---'}</td>
+                    <td>${ap.horas_trabalhadas ?? 0}</td>
+                </tr>
+            `;
+
+            if (mediaUrl) {
+                const mediaContent = `
+                    <a href="${mediaUrl}" target="_blank">Ver Mídia</a>
+                    <br>
+                    <img src="${mediaUrl}" alt="Mídia" style="max-width: 75px; height: auto;">
+                `;
+                html += `
+                    <tr>
+                        <td colspan="${COLSPAN_COUNT}" style="padding-left: 20px; background-color: #f9f9f9;">
+                            <span style="font-weight: bold;">Mídia Anexada:</span> ${mediaContent}
+                        </td>
+                    </tr>
+                `;
+            }
+        });
+
+        html += `
+            <tr>
+                <td colspan="${COLSPAN_COUNT - 1}" style="text-align: right; font-weight: bold;">TOTAL ATIVIDADE:</td>
+                <td style="font-weight: bold;">${totalHorasAtividade}</td>
+            </tr>
+            <tr>
+                <td colspan="${COLSPAN_COUNT - 1}" style="text-align: right; font-weight: bold;">TOTAL SUBPROJETO:</td>
+                <td style="font-weight: bold;">${totalHorasSubprojeto}</td>
+            </tr>
+            <tr>
+                <td colspan="${COLSPAN_COUNT - 1}" style="text-align: right; font-weight: bold;">TOTAL GERAL DO ALUNO:</td>
+                <td style="font-weight: bold;">${totalHorasAtividade + totalHorasSubprojeto}</td>
+            </tr>
+        `;
+
+        html += '</tbody></table><br><br>';
+    });
+
+    const totalGeral = totalGeralAtividade + totalGeralSubprojeto;
+    html += '<h2>RESUMO GERAL DO RELATÓRIO</h2>';
+    html += '<table border="1" style="width:300px; border-collapse: collapse;"><tbody>';
+    html += `<tr><td>TOTAL ATIVIDADE</td><td>${totalGeralAtividade}</td></tr>`;
+    html += `<tr><td>TOTAL SUBPROJETO</td><td>${totalGeralSubprojeto}</td></tr>`;
+    html += `<tr><td>TOTAL ACUMULADO</td><td>${totalGeral}</td></tr>`;
+    html += '</tbody></table>';
+
+    html += '</body></html>';
+    return html;
+}
 }
