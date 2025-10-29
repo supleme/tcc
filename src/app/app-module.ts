@@ -16,6 +16,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { RegisterSubproject } from './features/register-subproject/register-subproject';
 import { ModalInformationsStudent } from './components/modals/modal-informations-student/modal-informations-student';
 import { ModalAssignSubproject } from './components/modals/modal-assign-subproject/modal-assign-subproject';
+import { NotFound } from './features/not-found/not-found';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { ModalAssignSubproject } from './components/modals/modal-assign-subproje
     RegisterSubproject,
     ModalInformationsStudent,
     ModalAssignSubproject,
+    NotFound,
   ],
   imports: [
     NgApexchartsModule,
