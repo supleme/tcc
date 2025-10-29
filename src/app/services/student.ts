@@ -1,9 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from '../environments/environment';
 
 export interface NodeStudents {
   category: string
   students: string
+  month: string
+  year: string
 }
 
 @Injectable({
@@ -11,7 +14,7 @@ export interface NodeStudents {
 })
 export class Student {
 
-  apiUrl = 'http://localhost:8000/api/alunos';
+  apiUrl = `${environment.apiUrl}/alunos`;
 
   constructor( private http: HttpClient){}
 
@@ -25,7 +28,7 @@ export class Student {
   }
 
   getNodeStudents(body: NodeStudents) {
-    console.log(`${this.apiUrl}/report/${body?.category}/${body?.students}`);
-    return this.http.get(`${this.apiUrl}/report/${body?.category}/${body?.students}`);
+    // console.log(`getNodeStudents ${this.apiUrl}/report/${body?.category}/${body?.students}/${body?.month}/${body?.year}`);
+    return this.http.get(`${this.apiUrl}/report/${body?.category}/${body?.students}/${body?.month}/${body?.year}`);
   }
 }

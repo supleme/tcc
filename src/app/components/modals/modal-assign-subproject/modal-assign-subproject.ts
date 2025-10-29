@@ -34,7 +34,6 @@ export class ModalAssignSubproject {
     })
   }
   onChangeSubproject(event: any) {
-    console.log(event)
     this.selectedSubprojectId = event.target.value;
   }
 
@@ -52,7 +51,6 @@ export class ModalAssignSubproject {
 
     this.serviceSubproject.assignSubproject(Number(this.selectedSubprojectId), this.id_aluno).subscribe({
       next: (response: any) => {
-        console.log(response);
         Swal.fire({
           icon: 'success',
           title: 'Apontamento criado!',

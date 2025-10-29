@@ -55,7 +55,6 @@ export class Apontamento implements OnInit{
         this.id_aluno = res.id_usuario;
         this.serviceSubproject.getSubprojectByUser(this.id_aluno).subscribe({
           next: (response: any) => {
-            console.log('Subprojetos:', response.subprojects);
             this.subprojects = response.subprojects;
           },
           error: (error: any) => {

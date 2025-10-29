@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/api';
+  private apiUrl = `${environment.apiUrl}`;
   private authState = new BehaviorSubject<boolean>(this.hasToken());
   private userSubject = new BehaviorSubject<any>(this.getStoredUser());
 

@@ -25,7 +25,6 @@ export class Login {
 
       this.serviceAuth.login(email, password).subscribe({
         next: (res: any) => {
-          console.log('res.access_token', res.access_token);
           this.serviceAuth.setToken(res.access_token);
 
           this.serviceAuth.getMe().subscribe({
