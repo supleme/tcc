@@ -13,6 +13,7 @@ export class Navbar {
   alunoNome: string = '';
   alunoRA: string = '';
   allowedRoutes: Route[] = [];
+  disabled: boolean = false;
 
   constructor(private router: Router, private serviceAuth: AuthService) {
     this.router.events.subscribe(() => {
@@ -24,6 +25,7 @@ export class Navbar {
     const user = this.serviceAuth.getUser();
     if (user) {
       this.setUserRoutes(user);
+      this.disabled = true;
     }
 
     this.serviceAuth.userChanges().subscribe(aluno => {
@@ -61,15 +63,13 @@ export class Navbar {
     return roles.includes(user.type);
   });
 
-  // Garante que a rota '' (Home) sempre apareça
   if (homeRoute && !this.allowedRoutes.includes(homeRoute)) {
     this.allowedRoutes.unshift(homeRoute);
   }
 
-  // Remove rota de login
   this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== 'login');
+  this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== '**');
 
-  // Ajusta os títulos das rotas
   this.allowedRoutes = this.allowedRoutes.map(route => ({
     ...route,
     data: { ...route.data, title: route.data?.['title'] || route.path || 'Início' }
