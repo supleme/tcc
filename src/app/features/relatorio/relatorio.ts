@@ -4,28 +4,7 @@ import { AuthService } from '../../services/auth-service';
 import { Student } from '../../services/student';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import {
-  ApexNonAxisChartSeries,
-  ApexResponsive,
-  ApexChart,
-  ChartComponent,
-  ApexPlotOptions,
-  ApexDataLabels,
-  ApexLegend,
-  ApexAxisChartSeries,
-  ApexStroke,
-  ApexTooltip,
-  ApexXAxis,
-  ApexYAxis,
-  ApexTitleSubtitle,
-  ApexFill,
-  ApexMarkers,
-  ApexAnnotations,
-  ApexGrid,
-  ApexStates,
-  ApexNoData,
-
-} from "ng-apexcharts";
+import {ApexNonAxisChartSeries, ApexResponsive, ApexChart, ChartComponent, ApexPlotOptions, ApexDataLabels, ApexLegend, ApexAxisChartSeries, ApexStroke, ApexTooltip, ApexXAxis, ApexYAxis, ApexTitleSubtitle, ApexFill, ApexMarkers, ApexAnnotations, ApexGrid, ApexStates, ApexNoData } from "ng-apexcharts";
 import { Apontamento } from '../../interfaces/iApontamento';
 import { environment } from '../../environments/environment';
 
@@ -52,8 +31,6 @@ export type ChartOptions = {
   noData: ApexNoData;
 };
 
-
-
 @Component({
   selector: 'app-relatorio',
   standalone: false,
@@ -69,6 +46,21 @@ export class Relatorio {
   tipoUsuario: string = '';
   hours_available: number = 0;
   chartOptions: Partial<ChartOptions>;
+  years: { value: string; label: string }[] = [];
+  months = [
+    { value: '01', label: 'Janeiro' },
+    { value: '02', label: 'Fevereiro' },
+    { value: '03', label: 'Março' },
+    { value: '04', label: 'Abril' },
+    { value: '05', label: 'Maio' },
+    { value: '06', label: 'Junho' },
+    { value: '07', label: 'Julho' },
+    { value: '08', label: 'Agosto' },
+    { value: '09', label: 'Setembro' },
+    { value: '10', label: 'Outubro' },
+    { value: '11', label: 'Novembro' },
+    { value: '12', label: 'Dezembro' }
+  ];
   private readonly API_BASE_URL = environment.storageBaseUrl;
 
   constructor(private fb: FormBuilder, private serviceStudent: Student, private serviceAuth: AuthService) {
@@ -103,13 +95,21 @@ export class Relatorio {
         xaxis: {},
         yaxis: {}
     };
-
+    const currentYear = new Date().getFullYear();
+    for (let i: number = currentYear - 2; i <= currentYear + 2; i++) {
+      this.years.push({ value: i.toString(), label: i.toString() });
+    }
   }
 
   ngOnInit(): void {
+    const mesAtual = (new Date().getMonth() + 1).toString().padStart(2, '0');
+    const anoAtual = Number(new Date().getFullYear());
+
     this.relatorioForm = this.fb.group({
       category: ['Todas'],
       students: [''],
+      month: [mesAtual],
+      year: [anoAtual]
     });
 
     this.relatorioForm.get('category')?.valueChanges.subscribe((valor: string ) => {
@@ -118,7 +118,6 @@ export class Relatorio {
 
     const user = this.serviceAuth.getUser();
     if (!user) {
-      console.error('Usuário não encontrado no localStorage');
       return;
     }
 
@@ -127,7 +126,6 @@ export class Relatorio {
     this.hours_available = user.hours_available ?? 0;
 
     this.serviceStudent.getAlunos().subscribe({
-
       next: (response: any) => {
         if (this.tipoUsuario === 'Student') {
           const aluno = response.find((aluno: any) => aluno.id_usuario === this.id_aluno)
@@ -140,33 +138,68 @@ export class Relatorio {
         }
         const params = this.relatorioForm.value;
         this.loadChartData(params);
+        const mesSelecionado = this.relatorioForm.get('month')?.value;
+        const anoSelecionado = this.relatorioForm.get('year')?.value;
 
         this.relatorioForm.get('students')?.valueChanges.subscribe((idAlunoSelecionado: string | number) => {
+
           if (!idAlunoSelecionado || idAlunoSelecionado === 'Todos') {
             const params = {
               category: this.relatorioForm.get('category')?.value,
-              students: 'Todos'
+              students: 'Todos',
+              month: mesSelecionado,
+              year: anoSelecionado
             };
             this.loadChartData(params);
           } else {
             const params = {
               category: this.relatorioForm.get('category')?.value,
-              students: idAlunoSelecionado
+              students: idAlunoSelecionado,
+              month: mesSelecionado,
+              year: anoSelecionado
             };
-            console.log('else', params);
             this.loadChartData(params);
           }
         });
 
         this.relatorioForm.get('category')?.valueChanges.subscribe((categoriaSelecionada: string) => {
           const idAlunoSelecionado = this.relatorioForm.get('students')?.value;
+          const mesSelecionado = this.relatorioForm.get('month')?.value;
 
           const params = {
             category: categoriaSelecionada || 'Todas',
-            students: !idAlunoSelecionado || idAlunoSelecionado === 'Todos' ? 'Todos' : idAlunoSelecionado
+            students: !idAlunoSelecionado || idAlunoSelecionado === 'Todos' ? 'Todos' : idAlunoSelecionado,
+            month: mesSelecionado,
+            year: anoSelecionado
+          };
+          this.loadChartData(params);
+        });
+
+        this.relatorioForm.get('month')?.valueChanges.subscribe((mesSelecionado: string) => {
+          const categoriaSelecionada = this.relatorioForm.get('category')?.value || 'Todas';
+          const idAlunoSelecionado = this.relatorioForm.get('students')?.value;
+
+          const params = {
+            category: categoriaSelecionada,
+            students: !idAlunoSelecionado || idAlunoSelecionado === 'Todos' ? 'Todos' : idAlunoSelecionado,
+            month: mesSelecionado,
+            year: anoSelecionado
           };
 
-          console.log('Mudança de categoria', params);
+          this.loadChartData(params);
+        });
+
+        this.relatorioForm.get('year')?.valueChanges.subscribe((anoSelecionado: string) => {
+          const categoriaSelecionada = this.relatorioForm.get('category')?.value || 'Todas';
+          const idAlunoSelecionado = this.relatorioForm.get('students')?.value;
+
+          const params = {
+            category: categoriaSelecionada,
+            students: !idAlunoSelecionado || idAlunoSelecionado === 'Todos' ? 'Todos' : idAlunoSelecionado,
+            month: mesSelecionado,
+            year: anoSelecionado
+          };
+
           this.loadChartData(params);
         });
       },
@@ -177,9 +210,17 @@ export class Relatorio {
   }
 
   loadChartData(params: any) {
-    console.log('Carregando dados com parâmetros:', params);
     this.serviceStudent.getNodeStudents(params).subscribe({
       next: (response: any) => {
+        if(!response){
+          this.chartOptions = {
+            ...this.chartOptions,
+            series: [],
+            xaxis: { categories: [] },
+            noData: { text: 'Sem dados' }
+          };
+          return;
+        }
         const apontamentos: Apontamento[] = Object.values(response);
         this.chartOptions = {
           ...this.chartOptions,
@@ -188,6 +229,12 @@ export class Relatorio {
       },
       error: (error: any) => {
         console.error('Erro ao carregar dados:', error);
+        this.chartOptions = {
+          ...this.chartOptions,
+          series: [],
+          xaxis: { categories: [] },
+          noData: { text: 'Sem dados' }
+        };
       }
     });
   }

@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ISubproject } from '../interfaces/iSubproject';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Subproject {
-
-  apiUrl = 'http://localhost:8000/api/subprojects';
+  apiUrl = `${environment.apiUrl}/subprojects`;
 
   constructor( private http: HttpClient){}
 

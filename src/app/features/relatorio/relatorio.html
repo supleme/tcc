@@ -6,21 +6,33 @@
   <div class="flex">
     <div class="w-1/2">
       <form [formGroup]="relatorioForm" class="">
-        <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
         <div class="flex gap-2 items-center">
-          <div class="w-1/3">
+          <div class="w-1/5">
+            <label for="tarefa-input" class="block mb-2 text-sm font-medium text-gray-900">Categoria</label>
             <select formControlName="category" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option selected>Todas</option>
               <option value="Atividade">Atividade</option>
               <option value="Subprojeto">Subprojeto</option>
             </select>
           </div>
-
-
-          <div class="w-full" *ngIf="this.tipoUsuario !== 'Student'">
+          <div class="w-1/2" *ngIf="this.tipoUsuario !== 'Student'">
+            <label class="block mb-2 text-sm font-medium text-gray-900">Aluno</label>
             <select formControlName="students" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <option *ngIf="students.length > 0" value="Todos" selected>Todos</option>
               <option *ngFor="let student of students" [value]="student.id_usuario">{{student.name}}</option>
+            </select>
+          </div>
+          <div class="w-1/5">
+            <label class="block mb-2 text-sm font-medium text-gray-900">Mês</label>
+            <select formControlName="month" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option selected>Todos</option>
+              <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+            </select>
+          </div>
+          <div class="w-1/5">
+            <label class="block mb-2 text-sm font-medium text-gray-900">Ano</label>
+            <select formControlName="year" required class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option *ngFor="let year of years" [value]="year.value">{{ year.label }}</option>
             </select>
           </div>
         </div>

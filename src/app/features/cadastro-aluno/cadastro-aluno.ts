@@ -35,7 +35,6 @@ export class CadastroAluno {
   apontar(){
     if (this.cadastroForm.valid) {
       const formData = this.cadastroForm.value;
-      console.log('Dados do formulário:', formData);
 
       this.serviceStudent.registerStudent(formData).subscribe({
         next: (response: any) => {
