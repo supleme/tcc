@@ -3,6 +3,6 @@ export const environment = {
   // apiUrl: 'http://localhost:8000/api',
   // storageBaseUrl: 'http://localhost:8000/storage',
   production: true,
-  apiUrl: 'http://159.65.110.139:8000/api',
+  apiUrl: '/api',
   storageBaseUrl: 'http://159.65.110.139:8000/storage',
 };

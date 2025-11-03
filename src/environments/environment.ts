@@ -1,4 +1,5 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:8000/api'
+    production: true,
+    apiUrl: 'http://159.65.110.139/api',
+    storageBaseUrl: 'http://159.65.110.139/storage',
 };
