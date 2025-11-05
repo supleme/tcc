@@ -22,4 +22,12 @@ export class NodeTs {
   getNodeStudent(id: number) {
     return this.http.get(`${this.apiUrl}/aluno/${id}`);
   }
+
+  deleteNode(id: number){
+    return this.http.post(`${this.apiUrl}/delete/${id}`, null);
+  }
+
+  updateNode(body: any) {
+    return this.http.post(`${this.apiUrl}/update`, body);
+  }
 }

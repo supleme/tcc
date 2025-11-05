@@ -16,6 +16,10 @@ export class HomeSubproject {
   isModalSubOpen: boolean = false;
 
   constructor(private serviceSubroject: Subproject, private router: Router){
+    this.getSubprojects();
+  }
+
+  getSubprojects(){
     this.serviceSubroject.getSubprojects().subscribe({
       next: (response: any) => {
         this.subprojects = response;
@@ -24,7 +28,6 @@ export class HomeSubproject {
         console.log(error);
       }
     })
-
   }
 
   get num_subprojects(){
@@ -40,9 +43,18 @@ export class HomeSubproject {
       denyButtonText: `Não`
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("Apagou subprojeto", subproject);
-        // lógica de apagar subproject
-        Swal.fire("Apagado!", "", "success");
+        console.log("Apagou subprojeto", subproject.id_subproject);
+        let idSubproject = Number(subproject.id_subproject)
+        this.serviceSubroject.deleteSubproject(idSubproject).subscribe({
+          next: (response: any) => {
+            this.getSubprojects();
+            Swal.fire("Subprojeto apagado!", "", "success");
+          },
+          error: (error: any) => {
+            console.log(error.error.message);
+            Swal.fire("Erro ao apagar subprojeto!", error.error.message, "error");
+          }
+        })
       }
     });
   }

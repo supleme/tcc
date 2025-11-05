@@ -16,14 +16,7 @@ export class Alunos {
   isModalSubOpen: boolean = false;
 
   constructor(private serviceStudent: Student, private router: Router){
-    this.serviceStudent.getAlunos().subscribe({
-      next: (response: iStudent[]) => {
-        this.students = response;
-      },
-      error: (error: any) => {
-        console.log(error);
-      }
-    })
+    this.getStudents();
   }
 
 
@@ -55,6 +48,17 @@ export class Alunos {
     this.router.navigate(['/cadastro-aluno']);
   }
 
+  getStudents(){
+    this.serviceStudent.getAlunos().subscribe({
+      next: (response: iStudent[]) => {
+        this.students = response;
+      },
+      error: (error: any) => {
+        console.log(error);
+      }
+    })
+  }
+
   desativeStudent(student: iStudent){
      Swal.fire({
         title: "Desativar aluno?",
@@ -64,9 +68,45 @@ export class Alunos {
         denyButtonText: `Não`
       }).then((result) => {
         if (result.isConfirmed) {
-          console.log("Aluno desativado", student);
+          console.log("Aluno desativado", student.id_usuario);
+          this.serviceStudent.disableStudent(student.id_usuario).subscribe({
+            next: (response: any) => {
+              this.getStudents();
+              Swal.fire("Aluno desativado!", "", "success");
+            },
+            error: (error: any) => {
+              console.log(error);
+              Swal.fire("Erro ao desativar aluno!", "", "error");
+            }
+          })
           // lógica de apagar subproject
-          Swal.fire("Aluno desativado!", "", "success");
+
+        }
+      });
+  }
+
+  activeStudent(student: iStudent){
+     Swal.fire({
+        title: "Ativar aluno?",
+        icon: 'warning',
+        showDenyButton: true,
+        confirmButtonText: "Sim",
+        denyButtonText: `Não`
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("Aluno ativado", student.id_usuario);
+          this.serviceStudent.activeStudent(student.id_usuario).subscribe({
+            next: (response: any) => {
+              this.getStudents();
+              Swal.fire("Aluno ativado!", "", "success");
+            },
+            error: (error: any) => {
+              console.log(error);
+              Swal.fire("Erro ao ativar aluno!", "", "error");
+            }
+          })
+          // lógica de apagar subproject
+
         }
       });
   }
