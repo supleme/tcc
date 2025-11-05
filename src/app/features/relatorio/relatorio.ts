@@ -87,7 +87,7 @@ export class Relatorio {
         legend: {
             show: true,
             showForSingleSeries: true,
-            customLegendItems: ['Atual', 'Esperado'],
+            customLegendItems: ['Atual (Horas)', 'Esperado (Horas)'],
             markers: {
                 fillColors: ['#00E396', '#775DD0']
             }

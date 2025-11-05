@@ -9,6 +9,8 @@ import { CadastroAluno } from './features/cadastro-aluno/cadastro-aluno';
 import { AuthGuard } from './guards/auth-guard';
 import { RegisterSubproject } from './features/register-subproject/register-subproject';
 import { NotFound } from './features/not-found/not-found';
+import { HomeSubproject } from './features/home-subproject/home-subproject';
+import { NodeStudents } from './features/node-students/node-students';
 
 const routes: Routes = [
   {path: '', component: HomeAluno, canActivate: [AuthGuard], data: { roles: ['Student'], title: 'Home' } },
@@ -17,7 +19,9 @@ const routes: Routes = [
   {path: 'alunos', component: Alunos, canActivate: [AuthGuard], data: { roles: ['Coordinator'], title: 'Gerenciar Alunos' } },
   {path: 'login', component: Login},
   {path: 'cadastro-aluno', component: CadastroAluno, data: { roles: ['Coordinator'], title: 'Cadastrar Aluno' }},
+  {path: 'subprojeto', component: HomeSubproject, canActivate: [AuthGuard], data: { roles: ['Coordinator'], title: 'Subprojeto'} },
   {path: 'cadastro-subprojeto', component: RegisterSubproject, canActivate: [AuthGuard], data: { roles: ['Coordinator'], title: 'Cadastrar Subprojeto'} },
+  {path: 'apontamento-alunos', component: NodeStudents, canActivate: [AuthGuard], data: { roles: ['Coordinator'], title: 'Acompanhar Apontamentos'}},
   { path: '**', component: NotFound }
 ];
 

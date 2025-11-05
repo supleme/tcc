@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Student } from '../../services/student';
 import { iStudent } from '../../interfaces/iStudent';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-alunos',
   standalone: false,
@@ -13,7 +15,7 @@ export class Alunos {
   isModalInfOpen: boolean = false;
   isModalSubOpen: boolean = false;
 
-  constructor(private serviceStudent: Student){
+  constructor(private serviceStudent: Student, private router: Router){
     this.serviceStudent.getAlunos().subscribe({
       next: (response: iStudent[]) => {
         this.students = response;
@@ -47,5 +49,25 @@ export class Alunos {
   fecharModalSub(){
     this.isModalSubOpen = false;
     this.studentSelect = undefined;
+  }
+
+  createStudent(){
+    this.router.navigate(['/cadastro-aluno']);
+  }
+
+  desativeStudent(student: iStudent){
+     Swal.fire({
+        title: "Desativar aluno?",
+        icon: 'warning',
+        showDenyButton: true,
+        confirmButtonText: "Sim",
+        denyButtonText: `Não`
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("Aluno desativado", student);
+          // lógica de apagar subproject
+          Swal.fire("Aluno desativado!", "", "success");
+        }
+      });
   }
 }

@@ -5,7 +5,16 @@
 </div>
 
 <div class="w-4/5 mx-auto justify-end py-2.5 rounded-xl shadow-xl sm:p-8">
-  <h2 class="font-bold">Total: {{ num_students }}</h2>
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="font-bold">Total: {{ num_students }}</h2>
+    <button
+      class="rounded-full px-3 py-1 bg-green-500 text-white hover:bg-green-600 transition"
+      (click)="createStudent()"
+    >
+      Cadastrar Aluno
+    </button>
+  </div>
+  <br>
   <div *ngFor="let student of students" class="py-2">
     <div class="flex items-center justify-between">
       <div>
@@ -13,7 +22,8 @@
       </div>
       <div>
         <button class="rounded-full px-3 py-0.5 bg-blue-500 text-white hover:bg-blue-600 transition" (click)="showInformation(student)">Informações</button>
-        <button class="rounded-full px-3 py-0.5 ml-2.5 bg-green-500 text-white hover:bg-green-600 transition" (click)="assignSubproject(student)">Atribuir Subprojeto</button>
+        <button class="rounded-full px-3 py-0.5 ml-2.5 bg-purple-500 text-white hover:bg-purple-600 transition" (click)="assignSubproject(student)">Atribuir Subprojeto</button>
+        <button class="rounded-full px-3 py-0.5 ml-2.5 bg-red-500 text-white hover:bg-red-600 transition" (click)="desativeStudent(student)">Desativar</button>
       </div>
        </div>
 

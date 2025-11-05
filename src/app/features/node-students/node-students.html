@@ -1,10 +1,10 @@
 <div class="grid grid-cols-6 gap-4">
-  <div class="text-center col-start-2 col-end-6"><span class="self-center text-2xl font-semibold whitespace-nowrap">Relatorio</span></div>
+  <div class="text-center col-start-2 col-end-6"><span class="self-center text-2xl font-semibold whitespace-nowrap">Apontamentos</span></div>
 </div>
 
 <div class="w-4/5 mx-auto justify-end py-2.5 rounded-xl shadow-xl sm:p-8">
   <div class="flex">
-    <div class="w-1/2">
+    <div class="w-full">
       <form [formGroup]="relatorioForm" class="">
         <div class="flex gap-2 items-center">
           <div class="w-1/5">
@@ -37,21 +37,42 @@
           </div>
         </div>
       </form>
-    </div>
+      <hr class="my-6 border-gray-300" />
 
-    <div class="w-1/2 mb-5 justify-end text-end">
-      <button type="button" (click)="ExportExcel()" class="mt-6 text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Exportar para Excel</button>
-      <button type="button" (click)="ExportWord()" class="mt-6 text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2">Exportar para Word</button>
+      <div *ngIf="apontamentos.length > 0; else semApontamentos" class="mt-4">
+        <div class="grid grid-cols-7 font-semibold border-b border-gray-300 pb-2 mb-2">
+          <span class="col-span-2">Descrição</span>
+          <span>Categoria</span>
+          <span>Horas</span>
+          <span>Data</span>
+          <span>Aluno</span>
+          <span>Ações</span>
+        </div>
+
+        <div *ngFor="let ap of apontamentos" class="grid grid-cols-7 items-center border-b border-gray-200 py-2 text-sm">
+          <span class="col-span-2">{{ ap.descricao || '---' }}</span>
+          <span>{{ ap.categoria }}</span>
+          <span>{{ ap.horas_trabalhadas ?? 0 }}</span>
+          <span>{{ ap.data_apontamento | date:'dd/MM/yyyy' }}</span>
+          <span>{{ ap.aluno_nome || '---' }}</span>
+          <span>
+            <div class="flex">
+              <div>
+                <button class="rounded-full px-3 py-0.5  bg-purple-500 text-white hover:bg-purple-600 transition" (click)="modifyNode(ap)">Editar</button>
+              </div>
+              <div>
+                <button class="rounded-full px-3 py-0.5 ml-1.5 bg-red-500 text-white hover:bg-red-600 transition" (click)="modifyNode(ap)">Apagar</button>
+              </div>
+            </div>
+
+
+          </span>
+
+        </div>
+      </div>
+
+      <ng-template #semApontamentos>
+        <p class="text-center text-gray-500 mt-6">Nenhum apontamento encontrado.</p>
+      </ng-template>
     </div>
   </div>
-    <apx-chart
-        [series]="chartOptions.series!"
-        [chart]="chartOptions.chart!"
-        [dataLabels]="chartOptions.dataLabels!"
-        [plotOptions]="chartOptions.plotOptions!"
-        [legend]="chartOptions.legend!"
-        [colors]="chartOptions.colors!"
-        [xaxis]="chartOptions.xaxis!"
-    ></apx-chart>
-</div>
-

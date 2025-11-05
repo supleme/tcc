@@ -69,6 +69,8 @@ export class Navbar {
 
   this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== 'login');
   this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== '**');
+  this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== 'cadastro-subprojeto');
+  this.allowedRoutes = this.allowedRoutes.filter(route => route.path !== 'cadastro-aluno');
 
   this.allowedRoutes = this.allowedRoutes.map(route => ({
     ...route,

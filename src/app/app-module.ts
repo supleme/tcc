@@ -17,6 +17,8 @@ import { RegisterSubproject } from './features/register-subproject/register-subp
 import { ModalInformationsStudent } from './components/modals/modal-informations-student/modal-informations-student';
 import { ModalAssignSubproject } from './components/modals/modal-assign-subproject/modal-assign-subproject';
 import { NotFound } from './features/not-found/not-found';
+import { HomeSubproject } from './features/home-subproject/home-subproject';
+import { NodeStudents } from './features/node-students/node-students';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { NotFound } from './features/not-found/not-found';
     ModalInformationsStudent,
     ModalAssignSubproject,
     NotFound,
+    HomeSubproject,
+    NodeStudents,
   ],
   imports: [
     NgApexchartsModule,
