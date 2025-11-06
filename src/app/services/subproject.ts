@@ -26,4 +26,8 @@ export class Subproject {
   getSubprojectByUser(id: number) {
     return this.http.get(`${this.apiUrl}/users/${id}`);
   }
+
+  deleteSubproject(id: number){
+    return this.http.post(`${this.apiUrl}/delete/${id}`, null);
+  }
 }

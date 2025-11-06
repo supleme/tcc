@@ -3,6 +3,8 @@ import { AuthService } from '../../services/auth-service';
 import { Student } from '../../services/student';
 import { FormBuilder } from '@angular/forms';
 import { Apontamento } from '../../interfaces/iApontamento';
+import Swal from 'sweetalert2';
+import { NodeTs } from '../../services/node.ts';
 
 @Component({
   selector: 'app-node-students',
@@ -18,6 +20,9 @@ export class NodeStudents {
   hours_available: number = 0;
   students: any[] = [];
   category: string = '';
+  showModal = false;
+  editForm: any;
+  selectedApontamento: any = null;
   years: { value: string; label: string }[] = [];
   months = [
     { value: '01', label: 'Janeiro' },
@@ -34,7 +39,7 @@ export class NodeStudents {
     { value: '12', label: 'Dezembro' }
   ];
 
-  constructor(private fb: FormBuilder, private serviceStudent: Student, private serviceAuth: AuthService) {
+  constructor(private fb: FormBuilder, private serviceStudent: Student, private serviceAuth: AuthService, private serviceApontamento: NodeTs) {
     const currentYear = new Date().getFullYear();
     for (let i: number = currentYear - 2; i <= currentYear + 2; i++) {
       this.years.push({ value: i.toString(), label: i.toString() });
@@ -42,6 +47,10 @@ export class NodeStudents {
   }
 
   ngOnInit(): void {
+    this.editForm = this.fb.group({
+      horas_trabalhadas: [0],
+      data_apontamento: ['']
+    });
     const mesAtual = (new Date().getMonth() + 1).toString().padStart(2, '0');
     const anoAtual = Number(new Date().getFullYear());
 
@@ -164,6 +173,83 @@ export class NodeStudents {
 
   }
   modifyNode(node: Apontamento) {
-    console.log(node);
+    this.selectedApontamento = node;
+    this.editForm.patchValue({
+      horas_trabalhadas: node.horas_trabalhadas || 0,
+      data_apontamento: node.data_apontamento ? node.data_apontamento.split('T')[0] : ''
+    });
+    this.showModal = true;
   }
+
+  closeModal() {
+    this.showModal = false;
+    this.selectedApontamento = null;
+  }
+
+
+  saveChanges() {
+    const newHours = this.editForm.value.horas_trabalhadas;
+    const newDateApontamento = this.editForm.value.data_apontamento;
+
+    if (!this.selectedApontamento) return;
+
+    const updated = {
+      ...this.selectedApontamento,
+      horas_trabalhadas: newHours,
+    };
+
+    const body = {
+      id_apontamento: updated.id_apontamento,
+      horas_trabalhadas: newHours,
+      data_apontamento: newDateApontamento
+    }
+    console.log(" body", body);
+    this.serviceApontamento.updateNode(body).subscribe({
+      next: () => {
+        const param = {
+          category: this.relatorioForm.get('category')?.value,
+          students: this.relatorioForm.get('students')?.value,
+          month: this.relatorioForm.get('month')?.value,
+          year: this.relatorioForm.get('year')?.value
+        }
+        this.loadApontamentos(param);
+        Swal.fire("Sucesso", "Horas atualizadas com sucesso!", "success");
+        this.closeModal();
+      },
+      error: (error) => {
+        console.error(error);
+        Swal.fire("Erro", "Não foi possível atualizar as horas.", "error");
+      }
+    });
+  }
+
+  deleteNode(node: Apontamento){
+      Swal.fire({
+        title: "Deseja apagar o apontamento?",
+        icon: 'warning',
+        showDenyButton: true,
+        confirmButtonText: "Sim",
+        denyButtonText: `Não`
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("Apagou apontamento", node.id_apontamento);
+          this.serviceApontamento.deleteNode(node.id_apontamento).subscribe({
+            next: (response: any) => {
+              const param = {
+                category: this.relatorioForm.get('category')?.value,
+                students: this.relatorioForm.get('students')?.value,
+                month: this.relatorioForm.get('month')?.value,
+                year: this.relatorioForm.get('year')?.value
+              }
+              this.loadApontamentos(param);
+              Swal.fire("Apontamento apagado!", "", "success");
+            },
+            error: (error: any) => {
+              console.log(error.error.message);
+              Swal.fire("Erro ao apagar apontamento!", error.error.message, "error");
+            }
+          })
+        }
+      });
+    }
 }

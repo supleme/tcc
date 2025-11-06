@@ -22,7 +22,6 @@ export class Student {
     return this.http.post(this.apiUrl, body);
   }
 
-
   getAlunos(): any {
     return this.http.get(this.apiUrl);
   }
@@ -30,5 +29,13 @@ export class Student {
   getNodeStudents(body: NodeStudents) {
     // console.log(`getNodeStudents ${this.apiUrl}/report/${body?.category}/${body?.students}/${body?.month}/${body?.year}`);
     return this.http.get(`${this.apiUrl}/report/${body?.category}/${body?.students}/${body?.month}/${body?.year}`);
+  }
+
+  disableStudent(id: number) {
+    return this.http.post(`${this.apiUrl}/${id}/disable`, null);
+  }
+
+  activeStudent(id: number) {
+    return this.http.post(`${this.apiUrl}/${id}/active`, null);
   }
 }
